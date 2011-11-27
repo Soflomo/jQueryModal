@@ -1,15 +1,15 @@
 (function($) {
     $.fn.confirmation = function(o){
-        jQuery(this).click(function(event) {
+        $(this).click(function(event) {
             event.preventDefault();
             // e element clicked, t template, o options from user
-            var e = jQuery(this), t = e.data('template');
+            var e = $(this), t = e.data('template');
             if (t !== undefined) {
                 if ('#' === t.charAt(0)) {
-                    show(e, jQuery(t), o);
+                    show(e, $(t), o);
                 } else {
                     $.get(t, function (data) {
-                        show(e, jQuery('<div>').html(data), o);
+                        show(e, $('<div>').html(data), o);
                     });
                 }
             }
