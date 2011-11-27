@@ -17,33 +17,34 @@
     };
     
     function show (e, t, o) {
-        var dialog = $.extend({}, o), buttons = {}, method  = 'GET',
-            submit = 'Submit', cancel = 'Cancel', title = e.text();
+        var dialog = $.extend({}, o), buttons = {}, options = $.extend({}, $.fn.confirmation.defaults),
+        changed = false, html = t.html(); options.title  = e.text();
 
         if (e.data('submit') !== undefined) {
-            submit = e.data('submit');
+            options.submit = e.data('submit');
         }
         if (e.data('cancel') !== undefined) {
-            cancel = e.data('cancel');
+            options.cancel = e.data('cancel');
         }
         if (e.data('method') !== undefined) {
-            method = e.data('method');
+            options.method = e.data('method');
         }
         if (e.data('title') !== undefined) {
-            title = e.data('title');
+            options.title = e.data('title');
         }
 
-        buttons[submit] = function (){
-            $.ajax(e.attr('href'), {
-                type: method
-            });
+        buttons[options.submit] = function (){
+            if (options.ajax) {
+                $.ajax(e.attr('href'), {type: options.method});
+            } else {
+                window.location.href = e.attr('href');
+            }
             t.dialog('close');
         };
-        buttons[cancel] = function (){
+        buttons[options.cancel] = function (){
             t.dialog('close');
         };
 
-        var changed = false, html = t.html();
         for (var name in e.data()) {
             var val = e.data(name), key = '%'+name+'%';
 
@@ -56,8 +57,15 @@
             t.html(html);
         }
 
-        dialog.title   = title;
+        dialog.title   = options.title;
         dialog.buttons = buttons;
         t.dialog(dialog);
+    };
+    
+    $.fn.confirmation.defaults = {
+        submit: 'Submit',
+        cancel: 'Cancel',
+        ajax:   true,
+        method: 'GET'
     };
 })(jQuery);

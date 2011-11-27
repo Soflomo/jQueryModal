@@ -56,3 +56,14 @@ The modal dialog is created with sane jQuery UI defaults. If you want to change 
     </script>
 
 The object is the standard options object used to instantiate the dialog, so almost all options available for the dialog can be tuned with this object. The only two who will be overwritten are the title and buttons properties.
+
+Plugin configuration
+---
+The plugin has defaults for button labels and the type of request done after a click on the submit button. These defaults can be overwritten, so it is not required to enter a submit label for every link on the page individually.
+
+    $.fn.confirmation.defaults.submit = "Proceed" // override submit label
+    $.fn.confirmation.defaults.cancel = "Return"  // override cancel label
+    $.fn.confirmation.defaults.method = "POST"    // override method of ajax request
+    $.fn.confirmation.defaults.ajax   = false     // override if ajax request will be made
+
+The last option is a boolean and when set to false, the browser will be redirected. No ajax request will be executed in the background.
