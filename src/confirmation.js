@@ -14,6 +14,8 @@
                 }
             }
         });
+        
+        return this;
     };
     
     function show (e, t, o) {
