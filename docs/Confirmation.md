@@ -67,3 +67,7 @@ The plugin has defaults for button labels and the type of request done after a c
     $.fn.confirmation.defaults.ajax   = false     // override if ajax request will be made
 
 The last option is a boolean and when set to false, the browser will be redirected. No ajax request will be executed in the background.
+
+Compressed version
+---
+A compressed version is in the repository as well. The YUI Compressor 2.4.6 is used to make the compressed script.
