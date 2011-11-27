@@ -6,7 +6,7 @@ The contents of the dialog is called a template and can be placed inside the DOM
 Example of usage:
 
     <a href="/user/delete" class="confirm" data-template"#tmpl">Delete</a>
-    <div id="tmpl" class="hidden">Are you sure you want to delete this user?/div>
+    <div id="tmpl" class="hidden">Are you sure you want to delete this user?</div>
 
     <script>$(".confirm").confirmation();</script>
 
@@ -20,7 +20,7 @@ When the link is clicked, a dialog is shown with "Are you sure you want to delet
 Using data attributes these defaults can be overridden:
 
 1. `data-title="Title"`: to change the title
-2. `data-success="Proceed"`: to change the success button
+2. `data-submit="Proceed"`: to change the submit button
 3. `data-cancel="Return"`: to change cancel button
 4. `data-method="POST"`: type of request (defaults to GET)
 
