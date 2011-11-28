@@ -1,15 +1,16 @@
 (function($) {
-    $.fn.confirmation = function(o){
+    $.fn.confirmation = function(d, o){
         $(this).click(function(event) {
             event.preventDefault();
-            // e element clicked, t template, o options from user
+            
+            // e element clicked, t template, d options for dialog
             var e = $(this), t = e.data('template');
             if (t !== undefined) {
                 if ('#' === t.charAt(0)) {
-                    show(e, $(t), o);
+                    show(e, $(t), d, o);
                 } else {
                     $.get(t, function (data) {
-                        show(e, $('<div>').html(data), o);
+                        show(e, $('<div>').html(data), d, o);
                     });
                 }
             }
@@ -18,26 +19,28 @@
         return this;
     };
     
-    function show (e, t, o) {
-        var dialog = $.extend({}, o), buttons = {}, options = $.extend({}, $.fn.confirmation.defaults),
-        changed = false, html = t.html(); options.title  = e.text();
+    function show (e, t, d, o) {
+        var dialog = $.extend({}, d), options = $.extend({}, $.fn.confirmation.defaults, o), buttons = {};
 
-        if (e.data('submit') !== undefined) {
-            options.submit = e.data('submit');
-        }
-        if (e.data('cancel') !== undefined) {
-            options.cancel = e.data('cancel');
-        }
-        if (e.data('method') !== undefined) {
-            options.method = e.data('method');
-        }
-        if (e.data('title') !== undefined) {
-            options.title = e.data('title');
+        if (options.title === undefined) {
+            if (e.data('title') !== undefined) {
+                options.title = e.data('title');
+            } else {
+                options.title  = e.text();
+            }
         }
 
         buttons[options.submit] = function (){
             if (options.ajax) {
-                $.ajax(e.attr('href'), {type: options.method});
+                $.ajax(e.attr('href'), {
+                    type: options.method,
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        options.callback.error(e, jqXHR, textStatus, errorThrown)
+                    },
+                    success: function(data, textStatus, jqXHR) {
+                        options.callback.success(e, data, textStatus, jqXHR)
+                    }
+                });
             } else {
                 window.location.href = e.attr('href');
             }
@@ -47,27 +50,33 @@
             t.dialog('close');
         };
 
-        for (var name in e.data()) {
-            var val = e.data(name), key = '%'+name+'%';
-
-            if (html.indexOf(key) != -1) {
-                changed = true;
-                html = html.replace(key, val);
-            }
-        }
-        if (changed) {
-            t.html(html);
-        }
+        var html = $.fn.confirmation.templator(t.html(), e.data());
+        t.html(html);
 
         dialog.title   = options.title;
         dialog.buttons = buttons;
         t.dialog(dialog);
     };
     
+    $.fn.confirmation.templator = function (tmpl, vars) {
+        for (var name in vars) {
+            var val = vars[name], key = '%'+name+'%';
+
+            if (tmpl.indexOf(key) != -1) {
+                tmpl = tmpl.replace(key, val);
+            }
+        }
+        return tmpl;
+    }
+    
     $.fn.confirmation.defaults = {
         submit: 'Submit',
         cancel: 'Cancel',
         ajax:   true,
-        method: 'GET'
+        method: 'GET',
+        callback: {
+            success: function () {},
+            error: function () {}
+        }
     };
 })(jQuery);
