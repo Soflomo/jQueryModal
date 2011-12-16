@@ -33,3 +33,13 @@ The form popup performs a XmlHttpRequest to another page to load some html (espe
     <script>$('.form').form();</script>
 
 A detailed page about the documentation for the form dialog can be found [here](https://github.com/Soflomo/jQueryModal/blog/master/docs/Form.md).
+
+TODO
+---
+
+1. Implement callbacks when ajax requests started
+
+For forms:
+
+1. Write better documentation
+2. Implement a "add & create new one" button
