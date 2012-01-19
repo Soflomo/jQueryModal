@@ -47,20 +47,29 @@
             template.dialog('close');
         };
         buttons[options.success] = function (){
+            options.onClick(element, template);
+            
             if (options.ajax) {
                 $.ajax(element.attr('href'), {
                     type: options.method,
                     error: function (jqXHR, textStatus, errorThrown) {
-                        options.onError(element, jqXHR, textStatus, errorThrown)
+                        options.onError(element, jqXHR, textStatus, errorThrown);
                     },
                     success: function(data, textStatus, jqXHR) {
-                        options.onSuccess(element, data, textStatus, jqXHR)
+                        options.onSuccess(element, data, textStatus, jqXHR);
+                        
+                        if (options.closeAfterAjax) {
+                            template.dialog('close');
+                        }
                     }
                 });
             } else {
                 window.location.href = element.attr('href');
             }
-            template.dialog('close');
+            
+            if (!options.closeAfterAjax) {
+                template.dialog('close');
+            }
         };
 
         var html = $.fn.confirm.templator(template.html(), element.data());
@@ -87,7 +96,9 @@
         success: 'Success',
         cancel: 'Cancel',
         ajax:   true,
+        closeAfterAjax: true,
         method: 'GET',
+        onClick: function () {},
         onSuccess: function () {},
         onError: function () {}
     };
