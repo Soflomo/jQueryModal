@@ -53,7 +53,7 @@ Modal configuration
 The modal dialog is created with sane jQuery UI defaults. If you want to change the dialog configuration, it's possible with an argument in the plugin call:
 
     <script>
-    $(".confirm").confirmation({
+    $(".confirm").confirm({
         template: '#tmpl'
     },{
         draggable: false
