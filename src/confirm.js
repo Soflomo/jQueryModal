@@ -1,29 +1,29 @@
 (function($) {
-    $.fn.confirm = function(o, d){
-        var o = $.extend({}, $.fn.confirm.defaults, o), d = $.extend({}, d);
+    $.fn.confirm = function(options, dialog){
+        var options = $.extend({}, $.fn.confirm.defaults, options),
+            dialog  = $.extend({}, dialog);
         
         $(this).click(function(event) {
             event.preventDefault();
             
-            // e element clicked, t template, d dialog config, o options
-            var e = $(this), t = o.template;
-            if (t === undefined) {
-                if (e.data('template') === undefined) {
+            var element = $(this), template = options.template;
+            if (template === undefined) {
+                if (element.data('template') === undefined) {
                     throw 'Template required';
                 } else {
-                    t = e.data('template');
+                    template = element.data('template');
                 }
             }
             
-            if ('#' === t.charAt(0)) {
-                show(e, $(t), o, d);
+            if ('#' === template.charAt(0)) {
+                show(element, $(template), options, dialog);
             } else {
-                $.ajax(t, {
+                $.ajax(template, {
                     error: function (jqXHR, textStatus, errorThrown) {
                         throw 'Error during request for template';
                     },
                     success: function (data) {
-                        show(e, $('<div>').html(data), o, d);
+                        show(element, $('<div>').html(data), options, dialog);
                     }
                 });
             }
