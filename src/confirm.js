@@ -42,6 +42,12 @@
                 options.title  = element.text();
             }
         }
+        if (element.data('cancel') !== undefined) {
+            options.cancel = element.data('cancel');
+        }
+        if (element.data('success') !== undefined) {
+            options.success = element.data('success');
+        }
 
         buttons[options.cancel] = function (){
             template.dialog('close');
